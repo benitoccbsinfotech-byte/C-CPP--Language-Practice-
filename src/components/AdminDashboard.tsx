@@ -1132,8 +1132,15 @@ int main() {
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Are you sure you want to delete the account for <strong className="text-white">{userToDelete.name}</strong> ({userToDelete.email})? This will permanently remove their access and roster entry.
+              Are you sure you want to delete the account for <strong className="text-white">{userToDelete.name}</strong> ({userToDelete.email})? This will permanently remove their access, submissions, and roster entry.
             </p>
+
+            {deleteError && (
+              <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                <span>{deleteError}</span>
+              </div>
+            )}
 
             <div className="flex items-center justify-end gap-2.5 pt-2">
               <button

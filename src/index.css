@@ -1,1 +1,95 @@
 @import "tailwindcss";
+
+/* 
+ * Global Theme Support (Dark, Light, and System modes)
+ * When html.light is applied, variables remap slate and surface colors
+ */
+:root {
+  color-scheme: dark;
+}
+
+html.light,
+body.light {
+  color-scheme: light;
+  --color-slate-950: #f8fafc; /* Canvas background */
+  --color-slate-900: #ffffff; /* Card / panel container surfaces */
+  --color-slate-850: #f1f5f9; /* Secondary panels / inset containers */
+  --color-slate-800: #e2e8f0; /* Borders, dividers, subtle button surfaces */
+  --color-slate-700: #cbd5e1; /* Accent borders */
+  --color-slate-600: #94a3b8; /* Secondary icons / subtle elements */
+  --color-slate-500: #64748b; /* Muted labels and placeholders */
+  --color-slate-400: #475569; /* Secondary body text */
+  --color-slate-300: #334155; /* Normal text */
+  --color-slate-200: #1e293b; /* High contrast text */
+  --color-slate-100: #0f172a; /* Primary headings */
+}
+
+/* Light mode text contrast adjustments */
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+/* Ensure solid action buttons keep high-contrast white text */
+html.light button.bg-purple-600 .text-white,
+html.light button.bg-purple-600,
+html.light button.bg-rose-600 .text-white,
+html.light button.bg-rose-600,
+html.light button.bg-emerald-600 .text-white,
+html.light button.bg-emerald-600,
+html.light [class*="bg-purple-600"] .text-white,
+html.light [class*="bg-rose-600"] .text-white {
+  color: #ffffff !important;
+}
+
+/* Brand green Run Code and action buttons maintain dark contrast text */
+html.light button.bg-emerald-500.text-slate-950,
+html.light button.bg-emerald-400.text-slate-950,
+html.light [class*="bg-emerald-500"] .text-slate-950,
+html.light [class*="bg-emerald-400"] .text-slate-950 {
+  color: #020617 !important;
+}
+
+/* Transparent overlays in light mode */
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/85 {
+  background-color: rgba(248, 250, 252, 0.92) !important;
+}
+
+html.light .bg-slate-900\/50,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/80 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.light .bg-black\/80,
+html.light .bg-black\/70,
+html.light .bg-black\/60 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* Smooth theme transitions */
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbars for light mode */
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Selection */
+html.light *::selection {
+  background-color: #a7f3d0;
+  color: #064e3b;
+}

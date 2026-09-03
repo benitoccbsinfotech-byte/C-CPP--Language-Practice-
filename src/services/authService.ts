@@ -47,244 +47,9 @@ export const DEFAULT_USERS: User[] = [
     lastActive: 'Active now',
     submissionsCount: 45,
   },
-  {
-    id: 'student-alex',
-    name: 'Alex Rivera',
-    email: 'alex.rivera@c-mastery.edu',
-    role: 'student',
-    avatar: '👨‍💻',
-    title: 'Undergraduate CS Student',
-    bio: 'Aspiring systems software engineer. Aiming to master low-level pointers and algorithms. Target: Pwede ka na mag 2nd year! 🚀',
-    studentId: 'STU-2026-101',
-    enrolledCourse: 'CS201: C Systems Programming & Architecture',
-    solvedProblemIds: [
-      'hello-world',
-      'formatted-user-card',
-      'arithmetic-operators',
-      'even-odd-parity',
-      'factorial-loop',
-      'pointer-swap',
-    ],
-    streak: 7,
-    lastActive: '5 mins ago',
-    quizScore: {
-      score: 9,
-      total: 10,
-      percentage: 90,
-      completedAt: '2026-09-01',
-    },
-    submissionsCount: 9,
-  },
-  {
-    id: 'student-sarah',
-    name: 'Sarah Chen',
-    email: 'sarah.chen@c-mastery.edu',
-    role: 'student',
-    avatar: '👩‍💻',
-    title: 'Software Engineering Junior',
-    bio: "Targeting high-frequency trading and kernel development. Pointers don't scare me! ⚡",
-    studentId: 'STU-2026-104',
-    enrolledCourse: 'CS201: C Systems Programming & Architecture',
-    solvedProblemIds: [
-      'hello-world',
-      'formatted-user-card',
-      'arithmetic-operators',
-      'even-odd-parity',
-      'grade-calculator',
-      'factorial-loop',
-      'fibonacci-series',
-      'reverse-array',
-      'pointer-swap',
-      'array-sum-pointers',
-      'student-database-struct',
-    ],
-    streak: 15,
-    lastActive: '45 mins ago',
-    quizScore: {
-      score: 10,
-      total: 10,
-      percentage: 100,
-      completedAt: '2026-09-02',
-    },
-    submissionsCount: 16,
-  },
-  {
-    id: 'student-marcus',
-    name: 'Marcus Vance',
-    email: 'marcus.v@c-mastery.edu',
-    role: 'student',
-    avatar: '🧑‍💻',
-    title: 'Computer Engineering Sophomore',
-    bio: 'Passionate about embedded systems, robotics, and hardware-software co-design. 🤖',
-    studentId: 'STU-2026-109',
-    enrolledCourse: 'CS201: C Systems Programming & Architecture',
-    solvedProblemIds: ['hello-world', 'formatted-user-card', 'arithmetic-operators', 'even-odd-parity'],
-    streak: 3,
-    lastActive: 'Yesterday',
-    quizScore: {
-      score: 7,
-      total: 10,
-      percentage: 70,
-      completedAt: '2026-08-30',
-    },
-    submissionsCount: 5,
-  },
-  {
-    id: 'student-elena',
-    name: 'Elena Rostova',
-    email: 'elena.r@c-mastery.edu',
-    role: 'student',
-    avatar: '👩‍🔬',
-    title: 'Data Systems Sophomore',
-    bio: 'Exploring STL containers, templates, and high-performance Modern C++ architecture. 💡',
-    studentId: 'STU-2026-112',
-    enrolledCourse: 'CS202: Modern C++ (Object-Oriented & STL)',
-    solvedProblemIds: [
-      'cpp-hello-world',
-      'cpp-vector-sum',
-      'cpp-string-palindrome',
-      'cpp-rectangle-class',
-      'cpp-unique-ptr-demo',
-      'hello-world',
-      'arithmetic-operators',
-      'even-odd-parity',
-    ],
-    streak: 11,
-    lastActive: '2 hours ago',
-    quizScore: {
-      score: 9,
-      total: 10,
-      percentage: 90,
-      completedAt: '2026-09-02',
-    },
-    submissionsCount: 14,
-  },
-  {
-    id: 'student-liam',
-    name: 'Liam Patel',
-    email: 'liam.p@c-mastery.edu',
-    role: 'student',
-    avatar: '👨‍🎓',
-    title: 'Robotics Engineering Junior',
-    bio: 'C & C++ control loops for robotics microcontrollers. Practice makes perfect. ⚙️',
-    studentId: 'STU-2026-118',
-    enrolledCourse: 'CS201: C Systems Programming & Architecture',
-    solvedProblemIds: [
-      'hello-world',
-      'formatted-user-card',
-      'arithmetic-operators',
-      'factorial-loop',
-      'fibonacci-series',
-      'pointer-swap',
-    ],
-    streak: 6,
-    lastActive: '3 hours ago',
-    quizScore: {
-      score: 8,
-      total: 10,
-      percentage: 80,
-      completedAt: '2026-09-01',
-    },
-    submissionsCount: 8,
-  },
 ];
 
-
-export const INITIAL_SUBMISSIONS: SubmissionRecord[] = [
-  {
-    id: 'sub-101',
-    userId: 'student-sarah',
-    userName: 'Sarah Chen',
-    userEmail: 'sarah.chen@c-mastery.edu',
-    userRole: 'student',
-    studentId: 'STU-2026-104',
-    problemId: 'pointer-swap',
-    problemTitle: 'Pointer Swap Function',
-    code: `#include <stdio.h>
-
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-int main() {
-    int x, y;
-    if (scanf("%d %d", &x, &y) == 2) {
-        printf("Before: x = %d, y = %d\\n", x, y);
-        swap(&x, &y);
-        printf("After:  x = %d, y = %d\\n", x, y);
-    }
-    return 0;
-}`,
-    passed: true,
-    passedTests: 2,
-    totalTests: 2,
-    timestamp: '2026-09-02 08:30 AM',
-    executionTimeMs: 14,
-    gradeScore: 100,
-    feedback: 'Excellent clean pointer dereferencing implementation.',
-  },
-  {
-    id: 'sub-102',
-    userId: 'student-alex',
-    userName: 'Alex Rivera',
-    userEmail: 'alex.rivera@c-mastery.edu',
-    userRole: 'student',
-    studentId: 'STU-2026-101',
-    problemId: 'factorial-loop',
-    problemTitle: 'Factorial Computation (Loops)',
-    code: `#include <stdio.h>
-
-int main() {
-    int n;
-    long long fact = 1;
-    if (scanf("%d", &n) == 1) {
-        for (int i = 1; i <= n; i++) {
-            fact *= i;
-        }
-        printf("%lld\\n", fact);
-    }
-    return 0;
-}`,
-    passed: true,
-    passedTests: 3,
-    totalTests: 3,
-    timestamp: '2026-09-02 08:15 AM',
-    executionTimeMs: 9,
-    gradeScore: 98,
-    feedback: 'Correct usage of long long to prevent 32-bit overflow.',
-  },
-  {
-    id: 'sub-103',
-    userId: 'student-marcus',
-    userName: 'Marcus Vance',
-    userEmail: 'marcus.v@c-mastery.edu',
-    userRole: 'student',
-    studentId: 'STU-2026-109',
-    problemId: 'even-odd-parity',
-    problemTitle: 'Parity & Sign Checker',
-    code: `#include <stdio.h>
-
-int main() {
-    int n;
-    scanf("%d", &n);
-    if (n % 2 == 0) {
-        printf("%d is Even\\n", n);
-    } else {
-        printf("%d is Odd\\n", n);
-    }
-    return 0;
-}`,
-    passed: false,
-    passedTests: 2,
-    totalTests: 3,
-    timestamp: '2026-09-01 04:45 PM',
-    executionTimeMs: 11,
-    gradeScore: 70,
-    feedback: 'Remember to check edge case for negative numbers or 0.',
-  },
-];
+export const INITIAL_SUBMISSIONS: SubmissionRecord[] = [];
 
 const STORAGE_KEY_USER = 'c_auth_current_user_v5';
 const STORAGE_KEY_USERS_LIST = 'c_auth_all_users_v4';
@@ -305,79 +70,7 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     timestamp: 'Today, 8:00 AM',
     isInstructorReply: true,
   },
-  {
-    id: 'msg-alex-1',
-    threadId: 'student-alex',
-    senderId: 'student-alex',
-    senderName: 'Alex Rivera',
-    senderRole: 'student',
-    senderAvatar: '👨‍💻',
-    recipientId: ADMIN_CREDENTIALS.id,
-    recipientName: ADMIN_CREDENTIALS.name,
-    content: `Hello Instructor Cyrus! In the Pointer Swap problem, why is passing pointers required rather than just passing the normal integer values?`,
-    codeSnippet: `void swap(int a, int b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}`,
-    timestamp: 'Today, 8:15 AM',
-    relatedProblemId: 'pointer-swap',
-    relatedProblemTitle: 'Pointer Swap Function',
-  },
-  {
-    id: 'msg-cyrus-reply-alex',
-    threadId: 'student-alex',
-    senderId: ADMIN_CREDENTIALS.id,
-    senderName: ADMIN_CREDENTIALS.name,
-    senderRole: 'admin',
-    senderAvatar: '👑',
-    recipientId: 'student-alex',
-    recipientName: 'Alex Rivera',
-    content: `Great question Alex! In C, all function arguments are passed by value (copied onto the stack). If you pass 'int a, int b', the function modifies its local copies only, leaving the caller variables untouched. By passing pointer addresses ('int *a, int *b') and dereferencing them ('*a = *b'), you modify the actual memory cells in the caller's stack frame!`,
-    codeSnippet: `void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}`,
-    timestamp: 'Today, 8:20 AM',
-    isInstructorReply: true,
-  },
-  {
-    id: 'msg-sarah-1',
-    threadId: 'student-sarah',
-    senderId: 'student-sarah',
-    senderName: 'Sarah Chen',
-    senderRole: 'student',
-    senderAvatar: '👩‍💻',
-    recipientId: ADMIN_CREDENTIALS.id,
-    recipientName: ADMIN_CREDENTIALS.name,
-    content: `Hi Cyrus, when allocating dynamic memory with malloc, what is the best practice for checking if the allocation succeeded?`,
-    timestamp: 'Today, 8:40 AM',
-    relatedProblemId: 'dynamic-array-growth',
-    relatedProblemTitle: 'Dynamic Array Resizing',
-  },
-  {
-    id: 'msg-ai-sarah',
-    threadId: 'student-sarah',
-    senderId: 'ai-tutor',
-    senderName: 'AI C Tutor',
-    senderRole: 'ai',
-    senderAvatar: '🤖',
-    recipientId: 'student-sarah',
-    recipientName: 'Sarah Chen',
-    content: `Always check if the returned pointer is NULL before accessing it! If the system runs out of heap memory, malloc returns NULL. Dereferencing NULL causes a segmentation fault.`,
-    codeSnippet: `int *arr = (int *)malloc(10 * sizeof(int));
-if (arr == NULL) {
-    fprintf(stderr, "Memory allocation failed!\\n");
-    return 1;
-}
-// Safe to use arr
-free(arr);`,
-    timestamp: 'Today, 8:42 AM',
-    isAI: true,
-  },
 ];
-
 export class AuthService {
   private static getPasswordMap(): Record<string, string> {
     try {
@@ -409,19 +102,32 @@ export class AuthService {
       const saved = localStorage.getItem(STORAGE_KEY_USERS_LIST);
       if (saved) {
         const parsed: User[] = JSON.parse(saved);
-        // Ensure default seeded students are present if storage was created earlier
-        const existingIds = new Set(parsed.map((u) => u.id));
-        let changed = false;
-        DEFAULT_USERS.forEach((du) => {
-          if (!existingIds.has(du.id)) {
-            parsed.push(du);
-            changed = true;
-          }
-        });
-        if (changed) {
-          this.saveUsers(parsed);
+        const dummyIds = new Set(['student-alex', 'student-sarah', 'student-marcus', 'student-elena', 'student-liam']);
+        const dummyEmails = new Set([
+          'alex.rivera@c-mastery.edu',
+          'sarah.chen@c-mastery.edu',
+          'marcus.v@c-mastery.edu',
+          'elena.r@c-mastery.edu',
+          'liam.p@c-mastery.edu',
+        ]);
+
+        // Filter out all dummy accounts, keeping genuine registered users and admin
+        let filtered = parsed.filter(
+          (u) => !dummyIds.has(u.id) && !dummyEmails.has(u.email?.toLowerCase())
+        );
+
+        // Ensure Master Admin CYRUS is always present
+        const hasAdmin = filtered.some(
+          (u) => u.id === ADMIN_CREDENTIALS.id || u.email?.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()
+        );
+        if (!hasAdmin) {
+          filtered.unshift(DEFAULT_USERS[0]);
         }
-        return parsed;
+
+        if (filtered.length !== parsed.length || !hasAdmin) {
+          this.saveUsers(filtered);
+        }
+        return filtered;
       }
     } catch {
       // fallback
@@ -443,7 +149,12 @@ export class AuthService {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_USER);
       if (saved) {
-        const parsed = JSON.parse(saved);
+        const parsed: User = JSON.parse(saved);
+        const dummyIds = new Set(['student-alex', 'student-sarah', 'student-marcus', 'student-elena', 'student-liam']);
+        if (dummyIds.has(parsed.id) || parsed.email?.includes('@c-mastery.edu')) {
+          this.logout();
+          return null;
+        }
         const users = this.getUsers();
         const found = users.find((u) => u.id === parsed.id);
         if (found) return found;
@@ -622,21 +333,24 @@ export class AuthService {
     return { user: newAdmin };
   }
 
-  // Admin-Only: Delete Account
-  static deleteUser(adminUserId: string, targetUserId: string): { success: boolean; error?: string } {
-    const users = this.getUsers();
-    const admin = users.find((u) => u.id === adminUserId);
-    if (!admin || admin.role !== 'admin') {
-      return { success: false, error: 'Unauthorized: Only an administrator can delete accounts.' };
-    }
-
+  // Delete Account (Admins can delete any user except Master Admin; users can delete their own account)
+  static deleteUser(callerUserId: string, targetUserId: string): { success: boolean; error?: string } {
     if (targetUserId === ADMIN_CREDENTIALS.id) {
       return { success: false, error: 'Cannot delete the Lead Master Instructor account (CYRUS).' };
     }
 
+    const users = this.getUsers();
+    const caller = users.find((u) => u.id === callerUserId);
+    const isSelfDelete = callerUserId === targetUserId;
+    const isAdmin = caller?.role === 'admin';
+
+    if (!isAdmin && !isSelfDelete) {
+      return { success: false, error: 'Unauthorized: You can only delete your own account or must be an administrator.' };
+    }
+
     const targetUser = users.find((u) => u.id === targetUserId);
     if (!targetUser) {
-      return { success: false, error: 'User not found.' };
+      return { success: false, error: 'Account not found or already deleted.' };
     }
 
     const nextUsers = users.filter((u) => u.id !== targetUserId);
@@ -644,8 +358,24 @@ export class AuthService {
 
     // Clean up password map
     const passMap = this.getPasswordMap();
-    delete passMap[targetUser.email.toLowerCase()];
-    this.savePasswordMap(passMap);
+    if (targetUser.email) {
+      delete passMap[targetUser.email.toLowerCase()];
+      this.savePasswordMap(passMap);
+    }
+
+    // Clean up associated submissions
+    try {
+      const subs = this.getSubmissions().filter((s) => s.userId !== targetUserId);
+      this.saveSubmissions(subs);
+    } catch {}
+
+    // Clean up associated chat messages
+    try {
+      const msgs = this.getChatMessages().filter(
+        (m) => m.senderId !== targetUserId && m.recipientId !== targetUserId && m.threadId !== targetUserId
+      );
+      this.saveChatMessages(msgs);
+    } catch {}
 
     // If active user is the deleted user, log out
     const current = this.getCurrentUser();
@@ -783,7 +513,13 @@ export class AuthService {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_SUBMISSIONS);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed: SubmissionRecord[] = JSON.parse(saved);
+        const dummyIds = new Set(['student-alex', 'student-sarah', 'student-marcus', 'student-elena', 'student-liam']);
+        const filtered = parsed.filter((s) => !dummyIds.has(s.userId));
+        if (filtered.length !== parsed.length) {
+          this.saveSubmissions(filtered);
+        }
+        return filtered;
       }
     } catch {
       // fallback
@@ -921,13 +657,20 @@ export class AuthService {
       const saved = localStorage.getItem(STORAGE_KEY_CHAT_MESSAGES);
       if (saved) {
         const parsed: ChatMessage[] = JSON.parse(saved);
+        const dummyIds = new Set(['student-alex', 'student-sarah', 'student-marcus', 'student-elena', 'student-liam']);
+        const filtered = parsed.filter(
+          (m) => !dummyIds.has(m.senderId) && !dummyIds.has(m.recipientId || '') && !dummyIds.has(m.threadId)
+        );
+
         // Ensure initial welcome message uses the updated CYGPT text
-        const welcomeIdx = parsed.findIndex((m) => m.id === 'msg-welcome');
-        if (welcomeIdx !== -1 && parsed[welcomeIdx].content.includes('Welcome students to the CS201')) {
-          parsed[welcomeIdx].content = `Anong tanong nyo mga bata, CYGPT nga pala AHHAHAHAAHAHAHAHA sige tanong 24/7`;
-          this.saveChatMessages(parsed);
+        const welcomeIdx = filtered.findIndex((m) => m.id === 'msg-welcome');
+        if (welcomeIdx !== -1 && filtered[welcomeIdx].content.includes('Welcome students to the CS201')) {
+          filtered[welcomeIdx].content = `Anong tanong nyo mga bata, CYGPT nga pala AHHAHAHAAHAHAHAHA sige tanong 24/7`;
         }
-        return parsed;
+        if (filtered.length !== parsed.length || (welcomeIdx !== -1 && filtered[welcomeIdx].content.includes('CYGPT'))) {
+          this.saveChatMessages(filtered);
+        }
+        return filtered;
       }
     } catch {
       // fallback

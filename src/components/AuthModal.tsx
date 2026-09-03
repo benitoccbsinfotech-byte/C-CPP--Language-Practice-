@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { User } from '../types';
-import { AuthService } from '../services/authService';
+import { AuthService, ADMIN_CREDENTIALS } from '../services/authService';
 import { C_PRACTICE_PROBLEMS } from '../data/cProblems';
 import { CPP_PRACTICE_PROBLEMS } from '../data/cppProblems';
 import { ALL_ACHIEVEMENT_BADGES, getEarnedBadges } from '../utils/achievementBadges';
@@ -195,8 +195,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [isProcessingPhoto, setIsProcessingPhoto] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Account Deletion & Management State
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
+  const [accountDeletedMsg, setAccountDeletedMsg] = useState<string | null>(null);
+  const [availableAccounts, setAvailableAccounts] = useState<User[]>([]);
+  const [userToDeleteInSwitch, setUserToDeleteInSwitch] = useState<User | null>(null);
+
+  const refreshAvailableAccounts = () => {
+    setAvailableAccounts(AuthService.getUsers());
+  };
+
   // Synchronize profile form values when currentUser or modal opens
   useEffect(() => {
+    refreshAvailableAccounts();
     if (currentUser) {
       setEditName(currentUser.name || '');
       setEditAvatar(currentUser.avatar || '👨‍💻');
@@ -211,7 +222,45 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
     setProfileSuccess(null);
     setProfileError(null);
+    setDeleteConfirmOpen(false);
   }, [currentUser, isOpen]);
+
+  const handleSelfDeleteAccount = () => {
+    if (!currentUser) return;
+    const res = AuthService.deleteUser(currentUser.id, currentUser.id);
+    if (!res.success) {
+      setProfileError(res.error || 'Failed to delete account.');
+      setDeleteConfirmOpen(false);
+      return;
+    }
+    setAccountDeletedMsg(`Your account (${currentUser.name}) has been permanently deleted.`);
+    setDeleteConfirmOpen(false);
+    refreshAvailableAccounts();
+    if (onLogout) {
+      onLogout();
+    }
+    setTimeout(() => {
+      setAccountDeletedMsg(null);
+      if (onClose) onClose();
+    }, 1200);
+  };
+
+  const handleDeleteUserInSwitch = (targetUser: User) => {
+    const callerId = currentUser?.id || targetUser.id;
+    const res = AuthService.deleteUser(callerId, targetUser.id);
+    if (!res.success) {
+      setError(res.error || 'Failed to delete account.');
+      setUserToDeleteInSwitch(null);
+      return;
+    }
+    setSuccessMessage(`Account for "${targetUser.name}" successfully deleted.`);
+    setUserToDeleteInSwitch(null);
+    refreshAvailableAccounts();
+    if (currentUser?.id === targetUser.id && onLogout) {
+      onLogout();
+    }
+    setTimeout(() => setSuccessMessage(null), 3000);
+  };
 
   const handleProcessFile = async (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -1030,6 +1079,72 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* DANGER ZONE: Permanent Account Deletion */}
+              <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-900/40 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
+                    <Trash2 className="w-4 h-4" />
+                    <span>Danger Zone: Delete Account</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-rose-500/80 uppercase font-bold">Permanent Action</span>
+                </div>
+
+                {accountDeletedMsg && (
+                  <div className="p-3 rounded-xl bg-emerald-950/50 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{accountDeletedMsg}</span>
+                  </div>
+                )}
+
+                {currentUser.id === ADMIN_CREDENTIALS.id ? (
+                  <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-purple-400 shrink-0" />
+                    <span>The Master Lead Instructor account (CYRUS) is protected and cannot be deleted.</span>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Permanently delete your account (<strong className="text-white">{currentUser.name}</strong>). All your submissions, quiz scores, and saved settings will be wiped.
+                    </p>
+
+                    {deleteConfirmOpen ? (
+                      <div className="p-3 rounded-xl bg-slate-900 border border-rose-800/60 space-y-2.5 animate-in fade-in">
+                        <p className="text-xs font-bold text-rose-300">
+                          Are you sure you want to permanently delete this account?
+                        </p>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setDeleteConfirmOpen(false)}
+                            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            id="btn-confirm-self-delete"
+                            onClick={handleSelfDeleteAccount}
+                            className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow-sm"
+                          >
+                            Yes, Permanently Delete
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        id="btn-trigger-delete-account"
+                        onClick={() => setDeleteConfirmOpen(true)}
+                        className="w-full py-2.5 px-3 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/50 text-rose-300 hover:text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete Account</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -1120,6 +1235,120 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   >
                     Register Student
                   </button>
+                </div>
+              )}
+
+              {/* Available Accounts Quick Switcher & Manager */}
+              {availableAccounts.length > 0 && (
+                <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                      <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Available Accounts on this Device</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500">
+                      {availableAccounts.length} {availableAccounts.length === 1 ? 'account' : 'accounts'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                    {availableAccounts.map((u) => {
+                      const isCurrent = currentUser?.id === u.id;
+                      const isMasterAdmin = u.id === ADMIN_CREDENTIALS.id;
+                      const isDeletingThis = userToDeleteInSwitch?.id === u.id;
+
+                      return (
+                        <div
+                          key={u.id}
+                          className={`p-2.5 rounded-xl border flex items-center justify-between gap-2.5 transition ${
+                            isCurrent
+                              ? 'bg-emerald-950/20 border-emerald-500/40'
+                              : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <UserAvatar
+                              avatar={u.avatar}
+                              name={u.name}
+                              className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 text-sm shrink-0"
+                              fallbackEmoji={u.role === 'admin' ? '👑' : '👤'}
+                            />
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-bold text-white truncate">{u.name}</span>
+                                {isMasterAdmin && (
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono font-bold">
+                                    Admin
+                                  </span>
+                                )}
+                                {isCurrent && (
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono font-bold">
+                                    Active
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[10px] text-slate-400 font-mono truncate">{u.email}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {isDeletingThis ? (
+                              <div className="flex items-center gap-1 animate-in fade-in">
+                                <button
+                                  type="button"
+                                  onClick={() => setUserToDeleteInSwitch(null)}
+                                  className="px-2 py-1 rounded-lg bg-slate-800 text-[10px] text-slate-300 font-bold hover:bg-slate-700 transition"
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  type="button"
+                                  id={`btn-confirm-delete-switch-${u.id}`}
+                                  onClick={() => handleDeleteUserInSwitch(u)}
+                                  className="px-2 py-1 rounded-lg bg-rose-600 text-[10px] text-white font-bold hover:bg-rose-500 transition shadow-sm"
+                                >
+                                  Confirm
+                                </button>
+                              </div>
+                            ) : (
+                              <>
+                                {!isCurrent && (
+                                  <button
+                                    type="button"
+                                    id={`btn-quick-switch-to-${u.id}`}
+                                    onClick={() => {
+                                      AuthService.setCurrentUser(u);
+                                      onUserChange(u);
+                                      setSuccessMessage(`Switched active session to ${u.name}`);
+                                      setTimeout(() => {
+                                        setSuccessMessage(null);
+                                        if (onClose) onClose();
+                                      }, 600);
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition"
+                                  >
+                                    Switch
+                                  </button>
+                                )}
+
+                                {!isMasterAdmin && (
+                                  <button
+                                    type="button"
+                                    id={`btn-delete-account-switch-${u.id}`}
+                                    onClick={() => setUserToDeleteInSwitch(u)}
+                                    title={`Delete account for ${u.name}`}
+                                    className="p-1 rounded-lg bg-rose-950/30 hover:bg-rose-900/50 text-rose-400 hover:text-rose-200 border border-rose-900/40 transition cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 

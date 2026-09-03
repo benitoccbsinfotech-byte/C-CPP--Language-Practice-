@@ -26,6 +26,7 @@ import {
 import { User, CourseId } from '../types';
 import { getEarnedBadges, ALL_ACHIEVEMENT_BADGES, AchievementBadge } from '../utils/achievementBadges';
 import { UserAvatar } from './UserAvatar';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface HeaderProps {
   activeTab: 'problems' | 'sandbox' | 'quiz' | 'cheatsheet' | 'memory' | 'awards' | 'admin';
@@ -473,6 +474,9 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
+          {/* Global Theme Mode Switcher (Dark / Light / System) */}
+          <ThemeSwitcher />
+
           {/* AI & Cyrus Help Chat Toggle Button */}
           {onToggleChat && (
             <button
