@@ -1,0 +1,6 @@
+{
+  "name": "C Language Practice Studio",
+  "description": "Interactive C & C++ programming practice studio with browser code runner, step-by-step memory visualizer, test cases, classroom management, and curated challenges.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

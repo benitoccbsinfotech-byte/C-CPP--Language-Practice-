@@ -1,0 +1,83 @@
+import { QuizQuestion } from '../types';
+
+export const CPP_QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: 'cpp-q1',
+    category: 'classes-oop',
+    question: 'What is the default access specifier for members of a `class` in C++?',
+    options: ['public', 'private', 'protected', 'internal'],
+    correctIndex: 1,
+    explanation: 'In C++, `class` members are `private` by default, whereas `struct` members are `public` by default.',
+    courseId: 'cpp',
+  },
+  {
+    id: 'cpp-q2',
+    category: 'references',
+    question: 'Which statement about C++ references (`type &ref`) is FALSE?',
+    options: [
+      'A reference cannot be NULL.',
+      'A reference can be reseated to point to another variable after initialization.',
+      'A reference must be initialized when declared.',
+      'References do not require the * operator to access the underlying value.',
+    ],
+    correctIndex: 1,
+    explanation: 'Once initialized, a C++ reference cannot be reseated (re-bound) to alias a different variable. Assigning to it assigns a new value to the currently bound variable.',
+    courseId: 'cpp',
+  },
+  {
+    id: 'cpp-q3',
+    category: 'stl-containers',
+    question: 'What happens when `vec.push_back()` is called on a `std::vector` whose `size() == capacity()`?',
+    options: [
+      'A std::out_of_range exception is thrown.',
+      'The vector dynamically allocates a larger memory block (usually double), moves existing elements, and frees the old block.',
+      'The program aborts immediately with segmentation fault.',
+      'The new element overwrites the first element.',
+    ],
+    correctIndex: 1,
+    explanation: 'When capacity is exceeded, `std::vector` allocates a new larger buffer in heap memory (geometric growth, usually 1.5x or 2x), moves elements, and deallocates the previous chunk.',
+    courseId: 'cpp',
+  },
+  {
+    id: 'cpp-q4',
+    category: 'classes-oop',
+    question: 'Why should a base class destructor almost always be declared `virtual` in C++?',
+    options: [
+      'To enable faster object instantiation.',
+      'To prevent the destructor from being called.',
+      'To ensure that deleting a derived object through a base class pointer correctly calls the derived class destructor.',
+      'It is required by the C++ compiler to allow public inheritance.',
+    ],
+    correctIndex: 2,
+    explanation: 'If the base destructor is not virtual, `delete basePtr;` will only invoke `~Base()`, skipping `~Derived()` and causing resource/memory leaks.',
+    courseId: 'cpp',
+  },
+  {
+    id: 'cpp-q5',
+    category: 'smart-pointers',
+    question: 'What is the primary characteristic of `std::unique_ptr` in modern C++?',
+    options: [
+      'It allows multiple shared owners via reference counting.',
+      'It provides exclusive, non-copyable ownership of a dynamically allocated resource with zero runtime overhead.',
+      'It automatically garbage collects cycles.',
+      'It requires explicit call to `delete` when finished.',
+    ],
+    correctIndex: 1,
+    explanation: '`std::unique_ptr` enforces strict exclusive ownership (move-only semantics). It automatically deletes the managed object when it goes out of scope with zero memory overhead compared to a raw pointer.',
+    courseId: 'cpp',
+  },
+  {
+    id: 'cpp-q6',
+    category: 'templates',
+    question: 'When is a C++ function template instantiated into machine code?',
+    options: [
+      'At runtime when the function is first executed.',
+      'At compile-time for each distinct set of template arguments used in the code.',
+      'During preprocessor expansion before parsing.',
+      'By the OS dynamic linker.',
+    ],
+    correctIndex: 1,
+    explanation: 'C++ templates are a compile-time mechanism. The compiler generates specialized binary code for each unique type combination with which the template is invoked.',
+    courseId: 'cpp',
+  },
+];
