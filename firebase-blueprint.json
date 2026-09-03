@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FirebaseDataStructure",
+  "description": "Firestore document schemas for C & C++ Practice Studio online multi-device accounts",
+  "type": "object",
+  "properties": {
+    "collections": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "object",
+          "description": "Registered students and instructor administrators accessible across all devices",
+          "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "email": { "type": "string" },
+            "password": { "type": "string" },
+            "role": { "type": "string", "enum": ["admin", "student"] },
+            "avatar": { "type": "string" },
+            "title": { "type": "string" },
+            "studentId": { "type": "string" },
+            "enrolledCourse": { "type": "string" },
+            "bio": { "type": "string" },
+            "solvedProblemIds": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "streak": { "type": "number" },
+            "lastActive": { "type": "string" },
+            "submissionsCount": { "type": "number" }
+          },
+          "required": ["id", "name", "email", "role"]
+        },
+        "submissions": {
+          "type": "object",
+          "description": "Code lab submissions from students across all devices",
+          "properties": {
+            "id": { "type": "string" },
+            "userId": { "type": "string" },
+            "userName": { "type": "string" },
+            "userEmail": { "type": "string" },
+            "userRole": { "type": "string" },
+            "problemId": { "type": "string" },
+            "problemTitle": { "type": "string" },
+            "code": { "type": "string" },
+            "passed": { "type": "boolean" },
+            "passedTests": { "type": "number" },
+            "totalTests": { "type": "number" },
+            "timestamp": { "type": "string" },
+            "gradeScore": { "type": "number" },
+            "feedback": { "type": "string" }
+          },
+          "required": ["id", "userId", "problemId", "code", "passed"]
+        },
+        "customProblems": {
+          "type": "object",
+          "description": "Instructor-created practice problems synced online",
+          "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "category": { "type": "string" },
+            "difficulty": { "type": "string" },
+            "summary": { "type": "string" },
+            "description": { "type": "string" },
+            "initialCode": { "type": "string" },
+            "solutionCode": { "type": "string" }
+          },
+          "required": ["id", "title", "initialCode"]
+        },
+        "chatMessages": {
+          "type": "object",
+          "description": "Live classroom discussion messages synced online",
+          "properties": {
+            "id": { "type": "string" },
+            "threadId": { "type": "string" },
+            "senderId": { "type": "string" },
+            "senderName": { "type": "string" },
+            "senderRole": { "type": "string" },
+            "content": { "type": "string" },
+            "timestamp": { "type": "string" }
+          },
+          "required": ["id", "senderId", "senderName", "content"]
+        }
+      }
+    }
+  }
+}

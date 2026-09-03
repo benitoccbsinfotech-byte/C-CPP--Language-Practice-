@@ -38,6 +38,8 @@ import {
   Link as LinkIcon,
   Trash2,
   RefreshCw,
+  Cloud,
+  Loader2,
 } from 'lucide-react';
 
 const PRESET_AVATARS = [
@@ -198,6 +200,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Account Deletion & Management State
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
   const [accountDeletedMsg, setAccountDeletedMsg] = useState<string | null>(null);
+  const [isSubmittingAuth, setIsSubmittingAuth] = useState<boolean>(false);
 
   // Synchronize profile form values when currentUser or modal opens
   useEffect(() => {
@@ -350,7 +353,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setStudentId('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
@@ -361,72 +364,80 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    if (authMode === 'register') {
-      if (!name.trim()) {
-        setError('Please enter your full name.');
-        return;
-      }
-      if (!password || password.length < 4) {
-        setError('Password must be at least 4 characters long.');
-        return;
-      }
+    setIsSubmittingAuth(true);
 
-      const result = AuthService.registerStudent(
-        name,
-        cleanEmail,
-        password,
-        studentId,
-        selectedCourse
-      );
+    try {
+      if (authMode === 'register') {
+        if (!name.trim()) {
+          setError('Please enter your full name.');
+          return;
+        }
+        if (!password || password.length < 4) {
+          setError('Password must be at least 4 characters long.');
+          return;
+        }
 
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
+        const result = await AuthService.registerStudent(
+          name,
+          cleanEmail,
+          password,
+          studentId,
+          selectedCourse
+        );
 
-      if (result.user) {
-        onUserChange(result.user);
-        if (onClose) onClose();
-      }
-    } else if (authMode === 'forgot') {
-      if (!password || password.length < 4) {
-        setError('New password must be at least 4 characters long.');
-        return;
-      }
-      if (password !== confirmPassword) {
-        setError('Passwords do not match. Please re-enter.');
-        return;
-      }
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
 
-      const res = AuthService.resetPassword(cleanEmail, password, studentId);
-      if (!res.success) {
-        setError(res.message);
-        return;
-      }
+        if (result.user) {
+          onUserChange(result.user);
+          if (onClose) onClose();
+        }
+      } else if (authMode === 'forgot') {
+        if (!password || password.length < 4) {
+          setError('New password must be at least 4 characters long.');
+          return;
+        }
+        if (password !== confirmPassword) {
+          setError('Passwords do not match. Please re-enter.');
+          return;
+        }
 
-      setSuccessMessage(res.message);
-      setAuthMode('signin');
-      setEmail(cleanEmail);
-      setPassword('');
-      setConfirmPassword('');
-    } else {
-      // Standard Login
-      if (!password) {
-        setError('Please enter your password.');
-        return;
-      }
+        const res = await AuthService.resetPassword(cleanEmail, password, studentId);
+        if (!res.success) {
+          setError(res.message);
+          return;
+        }
 
-      const result = AuthService.login(cleanEmail, password);
+        setSuccessMessage(res.message);
+        setAuthMode('signin');
+        setEmail(cleanEmail);
+        setPassword('');
+        setConfirmPassword('');
+      } else {
+        // Standard Login
+        if (!password) {
+          setError('Please enter your password.');
+          return;
+        }
 
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
+        const result = await AuthService.login(cleanEmail, password);
 
-      if (result.user) {
-        onUserChange(result.user);
-        if (onClose) onClose();
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
+
+        if (result.user) {
+          onUserChange(result.user);
+          if (onClose) onClose();
+        }
       }
+    } catch (err: any) {
+      setError(err?.message || 'Authentication error. Please check your network connection.');
+    } finally {
+      setIsSubmittingAuth(false);
     }
   };
 
@@ -1225,6 +1236,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       ? 'Reset Your Account Password:'
                       : 'Enter Credentials:'}
                   </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-950/60 border border-emerald-500/30 text-[10px] font-mono text-emerald-400">
+                    <Cloud className="w-3 h-3 text-emerald-400" />
+                    <span>Cloud Synced</span>
+                  </span>
                 </div>
 
             {error && (
@@ -1445,16 +1460,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               id="btn-auth-submit"
-              className="w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-wider transition mt-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950/50 flex items-center justify-center gap-2"
+              disabled={isSubmittingAuth}
+              className={`w-full py-3.5 rounded-2xl text-xs font-bold uppercase tracking-wider transition mt-2 flex items-center justify-center gap-2 ${
+                isSubmittingAuth
+                  ? 'bg-emerald-600/70 text-slate-900 cursor-wait'
+                  : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-950/50 cursor-pointer'
+              }`}
             >
-              <span>
-                {authMode === 'register'
-                  ? 'Complete Registration & Enter'
-                  : authMode === 'forgot'
-                  ? 'Update & Reset Password'
-                  : 'Sign In & Access Studio'}
-              </span>
-              <ArrowRight className="w-4 h-4" />
+              {isSubmittingAuth ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Connecting to Cloud Database...</span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {authMode === 'register'
+                      ? 'Complete Registration & Enter'
+                      : authMode === 'forgot'
+                      ? 'Update & Reset Password'
+                      : 'Sign In & Access Studio'}
+                  </span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
 
             {/* Switch Mode Links */}

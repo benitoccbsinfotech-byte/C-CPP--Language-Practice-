@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, SubmissionRecord, PracticeProblem, Difficulty, ProblemCategory, CourseId } from '../types';
 import { AuthService, ADMIN_CREDENTIALS } from '../services/authService';
 import { ClassroomChatWidget } from './ClassroomChatWidget';
@@ -33,6 +33,7 @@ import {
   Mail,
   AlertCircle,
   Code2,
+  Cloud,
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -154,6 +155,20 @@ int main() {
     setAllUsers(AuthService.getUsers());
     setSubmissions(AuthService.getSubmissions());
   };
+
+  // Real-time synchronization with Firestore online database
+  useEffect(() => {
+    const unsubUsers = AuthService.subscribeUsers((users) => {
+      setAllUsers(users);
+    });
+    const unsubSubs = AuthService.subscribeSubmissions((subs) => {
+      setSubmissions(subs);
+    });
+    return () => {
+      unsubUsers();
+      unsubSubs();
+    };
+  }, []);
 
   const handleDeleteUser = () => {
     if (!userToDelete) return;
@@ -301,10 +316,14 @@ int main() {
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base font-bold text-white tracking-tight">Instructor & Lab Administration Portal</h2>
               <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-purple-950 text-purple-300 border border-purple-800/60">
                 Lead Admin: {currentUser.name}
+              </span>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 flex items-center gap-1">
+                <Cloud className="w-3 h-3 text-emerald-400" />
+                Cloud Database Online
               </span>
             </div>
             <p className="text-xs text-slate-400">

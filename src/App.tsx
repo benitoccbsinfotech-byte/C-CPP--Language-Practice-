@@ -36,6 +36,31 @@ export default function App() {
     return [...C_PRACTICE_PROBLEMS, ...CPP_PRACTICE_PROBLEMS, ...customProblems];
   }, [customProblems]);
 
+  // Real-time synchronization with Firestore online database
+  useEffect(() => {
+    const unsubUsers = AuthService.subscribeUsers((users) => {
+      setCurrentUser((prev) => {
+        if (!prev) return null;
+        const matched = users.find((u) => u.id === prev.id);
+        return matched || prev;
+      });
+    });
+
+    const unsubSubs = AuthService.subscribeSubmissions((subs) => {
+      setSubmissions(subs);
+    });
+
+    const unsubProblems = AuthService.subscribeCustomProblems((probs) => {
+      setCustomProblems(probs);
+    });
+
+    return () => {
+      unsubUsers();
+      unsubSubs();
+      unsubProblems();
+    };
+  }, []);
+
   const [activeTab, setActiveTab] = useState<'problems' | 'sandbox' | 'quiz' | 'cheatsheet' | 'memory' | 'awards' | 'admin'>('problems');
   const [selectedProblemId, setSelectedProblemId] = useState<string>(() => {
     const user = AuthService.getCurrentUser();
